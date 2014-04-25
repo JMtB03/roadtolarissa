@@ -109,7 +109,7 @@ setInterval(function(){
 
 //add sliders to the page
 var sliders = d3.select('#synthSliders').selectAll('input')
-    .data(['Pitch', 'BPM', 'Duration']).enter()
+    .data(['Pitch', 'BPM', 'Duration','Gain']).enter()
   .append('div')
     .style({display: 'inline-block', 'margin-left': '89.5px', 'text-align': 'center'})
 
@@ -135,6 +135,11 @@ function getDuration(){
   return scale.invert((d3.select('#Duration').node().valueAsNumber));
 }
 
+function getGain(){
+  var scale = d3.scale.log().base(2).domain([.1, 1]);
+  return scale.invert((d3.select('#Gain').node().valueAsNumber));
+}
+
 //generate oscillator
 function osc(pitch, waveform){
   oscillator = ac.createOscillator(),
@@ -143,6 +148,6 @@ function osc(pitch, waveform){
   gainNode = ac.createGain();
   oscillator.connect(gainNode);
   gainNode.connect(ac.destination);
-  gainNode.gain.value = .2;
+  gainNode.gain.value = getGain;
   return {osc: oscillator, gain: gainNode};
 };
